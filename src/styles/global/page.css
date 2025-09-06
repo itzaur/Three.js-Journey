@@ -1,0 +1,19 @@
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  color: var(--text-color);
+  background: var(--surface-document);
+}
+
+body {
+  box-sizing: inherit;
+  height: 100dvh;
+  margin: 0;
+  padding: 0;
+}

@@ -9,6 +9,14 @@ export default defineConfig({
   server: {
     port: 3000,
   },
+  optimizeDeps: {
+    include: [],
+  },
+  resolve: {
+    alias: {
+      '@sketches': '/sketches',
+    },
+  },
   plugins: [
     tsConfigPaths(),
     tanstackStart({ customViteReactPlugin: true }),

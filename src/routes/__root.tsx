@@ -6,6 +6,7 @@ import {
   HeadContent,
   Scripts,
 } from '@tanstack/react-router';
+
 import indexCss from '../styles/index.css?url';
 import poppins100 from '@fontsource/poppins/100.css?url';
 import poppins200 from '@fontsource/poppins/200.css?url';
@@ -18,6 +19,14 @@ import poppins800 from '@fontsource/poppins/800.css?url';
 import poppins900 from '@fontsource/poppins/900.css?url';
 
 export const Route = createRootRoute({
+  notFoundComponent() {
+    return (
+      <div className='not-found'>
+        <h1>Not Found</h1>
+        <p>The page you are looking for does not exist.</p>
+      </div>
+    );
+  },
   head: () => ({
     meta: [
       {
@@ -28,7 +37,7 @@ export const Route = createRootRoute({
         content: 'width=device-width, initial-scale=1',
       },
       {
-        title: 'TanStack Start Starter',
+        title: 'Three.js Journey',
       },
     ],
     links: [

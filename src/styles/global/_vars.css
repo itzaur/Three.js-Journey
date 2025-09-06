@@ -1,0 +1,9 @@
+@import 'theme.css';
+
+:root {
+  --primary-color: #111113;
+  --secondary-color: #333;
+  --bg-color: #222;
+  --text-color: #fff;
+  --font-family: 'Poppins', sans-serif;
+}

@@ -1,3 +1,11 @@
-body {
-  font-family: 'Poppins', sans-serif;
-}
+@layer system, base, components;
+
+@import './global/_vars.css' layer(system.props);
+@import './global/page.css' layer(base);
+@import './global/typography.css' layer(base);
+@import './global/typography.css' layer(base);
+@import './components/main.css' layer(components);
+@import './components/intro.css' layer(components);
+@import './components/home.css' layer(components);
+@import './components/aside.css' layer(components);
+@import './components/lessons.css' layer(components);
