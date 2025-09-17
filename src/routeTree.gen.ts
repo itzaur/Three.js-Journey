@@ -12,7 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as LessonsRouteRouteImport } from './routes/lessons/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as LessonsIntroRouteImport } from './routes/lessons/intro'
-import { Route as LessonsLessonTypeIdRouteImport } from './routes/lessons/lesson.$type.$id'
+import { Route as LessonsSketchTypeIdRouteImport } from './routes/lessons/$sketch.$type.$id'
 
 const LessonsRouteRoute = LessonsRouteRouteImport.update({
   id: '/lessons',
@@ -29,9 +29,9 @@ const LessonsIntroRoute = LessonsIntroRouteImport.update({
   path: '/intro',
   getParentRoute: () => LessonsRouteRoute,
 } as any)
-const LessonsLessonTypeIdRoute = LessonsLessonTypeIdRouteImport.update({
-  id: '/lesson/$type/$id',
-  path: '/lesson/$type/$id',
+const LessonsSketchTypeIdRoute = LessonsSketchTypeIdRouteImport.update({
+  id: '/$sketch/$type/$id',
+  path: '/$sketch/$type/$id',
   getParentRoute: () => LessonsRouteRoute,
 } as any)
 
@@ -39,32 +39,32 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/lessons': typeof LessonsRouteRouteWithChildren
   '/lessons/intro': typeof LessonsIntroRoute
-  '/lessons/lesson/$type/$id': typeof LessonsLessonTypeIdRoute
+  '/lessons/$sketch/$type/$id': typeof LessonsSketchTypeIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/lessons': typeof LessonsRouteRouteWithChildren
   '/lessons/intro': typeof LessonsIntroRoute
-  '/lessons/lesson/$type/$id': typeof LessonsLessonTypeIdRoute
+  '/lessons/$sketch/$type/$id': typeof LessonsSketchTypeIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/lessons': typeof LessonsRouteRouteWithChildren
   '/lessons/intro': typeof LessonsIntroRoute
-  '/lessons/lesson/$type/$id': typeof LessonsLessonTypeIdRoute
+  '/lessons/$sketch/$type/$id': typeof LessonsSketchTypeIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/lessons' | '/lessons/intro' | '/lessons/lesson/$type/$id'
+  fullPaths: '/' | '/lessons' | '/lessons/intro' | '/lessons/$sketch/$type/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/lessons' | '/lessons/intro' | '/lessons/lesson/$type/$id'
+  to: '/' | '/lessons' | '/lessons/intro' | '/lessons/$sketch/$type/$id'
   id:
     | '__root__'
     | '/'
     | '/lessons'
     | '/lessons/intro'
-    | '/lessons/lesson/$type/$id'
+    | '/lessons/$sketch/$type/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -95,11 +95,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LessonsIntroRouteImport
       parentRoute: typeof LessonsRouteRoute
     }
-    '/lessons/lesson/$type/$id': {
-      id: '/lessons/lesson/$type/$id'
-      path: '/lesson/$type/$id'
-      fullPath: '/lessons/lesson/$type/$id'
-      preLoaderRoute: typeof LessonsLessonTypeIdRouteImport
+    '/lessons/$sketch/$type/$id': {
+      id: '/lessons/$sketch/$type/$id'
+      path: '/$sketch/$type/$id'
+      fullPath: '/lessons/$sketch/$type/$id'
+      preLoaderRoute: typeof LessonsSketchTypeIdRouteImport
       parentRoute: typeof LessonsRouteRoute
     }
   }
@@ -107,12 +107,12 @@ declare module '@tanstack/react-router' {
 
 interface LessonsRouteRouteChildren {
   LessonsIntroRoute: typeof LessonsIntroRoute
-  LessonsLessonTypeIdRoute: typeof LessonsLessonTypeIdRoute
+  LessonsSketchTypeIdRoute: typeof LessonsSketchTypeIdRoute
 }
 
 const LessonsRouteRouteChildren: LessonsRouteRouteChildren = {
   LessonsIntroRoute: LessonsIntroRoute,
-  LessonsLessonTypeIdRoute: LessonsLessonTypeIdRoute,
+  LessonsSketchTypeIdRoute: LessonsSketchTypeIdRoute,
 }
 
 const LessonsRouteRouteWithChildren = LessonsRouteRoute._addFileChildren(

@@ -7,8 +7,8 @@ export default function BasicScene() {
       <mesh>
         <ambientLight intensity={Math.PI / 2} />
         <OrbitControls />
-        <boxGeometry />
-        <meshStandardMaterial color='orange' />
+        <sphereGeometry args={[2, 32, 16]} />
+        <meshStandardMaterial color='orange' wireframe={true} />
       </mesh>
     </Canvas>
   );

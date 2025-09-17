@@ -1,14 +1,12 @@
-const r3fModules = import.meta.glob('/sketches/r3f/**/*.{ts,tsx}', {
+const r3fModules = import.meta.glob('/sketches/**/*.{ts,tsx,jsx}', {
   eager: false,
 });
-const vanillaModules = import.meta.glob('/sketches/vanilla/**/*.js', {
-  eager: false,
-});
+const vanillaModules = import.meta.glob('/sketches/**/*.js', { eager: false });
 
-export async function loadSketch(type: string, id: string) {
+export async function loadSketch(type: 'r3f' | 'vanilla', id: string) {
   const map = type === 'r3f' ? r3fModules : vanillaModules;
   const path = Object.keys(map).find(
-    (p) => p.split('/').pop() === `${id}.${type === 'r3f' ? 'tsx' : 'js'}`
+    (path) => path.split('/').pop() === `${id}.${type === 'r3f' ? 'tsx' : 'js'}`
   );
 
   if (!path) throw new Error(`Sketch not found: ${type}/${id}`);

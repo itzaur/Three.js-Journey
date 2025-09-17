@@ -3,7 +3,5 @@ main {
   display: grid;
   grid-template-columns: 100% 1fr;
 
-  padding: 1rem;
-
   background-color: var(--bg-color);
 }

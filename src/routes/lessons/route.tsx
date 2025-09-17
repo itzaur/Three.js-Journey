@@ -1,4 +1,4 @@
-import { getLessons } from '@/server/lessons';
+import { getLessons } from '@/server/getLessons';
 import { createFileRoute, Link, Outlet } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/lessons')({
@@ -9,28 +9,34 @@ export const Route = createFileRoute('/lessons')({
 function Lessons() {
   const lessons = Route.useLoaderData();
 
+  console.log('lessons', lessons);
+
   return (
     <div className='home'>
       <aside className='lessons'>
         <h2>Lessons</h2>
-        <ul className='lessons__list'>
-          {lessons.map((lesson) =>
-            lesson.variants.map((variant) => (
-              <li
-                className='lessons__item'
-                key={`${lesson.id}-${variant.type}`}
-              >
+
+        {lessons.map((lesson) => (
+          <div key={lesson.title} className='lesson-block'>
+            <h3 className='lesson-block__title'>{lesson.title}</h3>
+            <div className='lesson-block__grid'>
+              {lesson.variants.map((variant) => (
                 <Link
-                  className='lessons__link'
-                  to='/lessons/lesson/$type/$id'
-                  params={{ type: variant.type, id: lesson.id }}
+                  key={variant.id}
+                  className='lesson-card'
+                  to='/lessons/$sketch/$type/$id'
+                  params={{
+                    sketch: lesson.sketch,
+                    type: variant.type,
+                    id: variant.id,
+                  }}
                 >
-                  {lesson.title} ({variant.type})
+                  {variant.type.toUpperCase()}
                 </Link>
-              </li>
-            ))
-          )}
-        </ul>
+              ))}
+            </div>
+          </div>
+        ))}
       </aside>
 
       <main id='root'>
