@@ -2,39 +2,5 @@ aside {
   width: 300px;
   border-right: 1px solid var(--color-6);
   padding: 1rem;
-  overflowy: auto;
-}
-
-.lesson-block {
-  margin-bottom: 2rem;
-}
-
-.lesson-block__title {
-  margin-bottom: 0.5rem;
-  font-size: 1.2rem;
-  font-weight: bold;
-}
-
-.lesson-block__grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0.75rem;
-}
-
-.lesson-card {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 12px;
-  background: #fff;
-  text-decoration: none;
-  color: #0070f3;
-  font-weight: 600;
-  transition: background 0.2s ease;
-}
-
-.lesson-card:hover {
-  background: #f0f0f0;
+  overflow-y: auto;
 }

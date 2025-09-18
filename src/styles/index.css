@@ -9,3 +9,5 @@
 @import './components/home.css' layer(components);
 @import './components/aside.css' layer(components);
 @import './components/lessons.css' layer(components);
+@import './components/cover-preview.css' layer(components);
+@import './components/card.css' layer(components);
