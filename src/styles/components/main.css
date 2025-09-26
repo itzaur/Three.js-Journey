@@ -5,3 +5,16 @@ main {
 
   background-color: var(--bg-color);
 }
+
+.container {
+  position: relative;
+
+  .container__box {
+    height: 100%;
+  }
+
+  .container__preloader {
+    position: absolute;
+    inset: 1rem 0 0 1rem;
+  }
+}

@@ -1,6 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { useEffect, useState, useRef } from 'react';
-import { loadSketch } from '@/utils/sketchLoader';
+import { useSketchLoader } from '@/hooks/useSketchLoader';
 
 export const Route = createFileRoute('/lessons/$sketch/$type/$id')({
   loader: async ({ params }) => ({
@@ -12,72 +11,39 @@ export const Route = createFileRoute('/lessons/$sketch/$type/$id')({
 
 function LessonDetail() {
   const { type, id } = Route.useLoaderData();
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [Component, setComponent] = useState<React.ComponentType | null>(null);
 
-  useEffect(() => {
-    let isMounted = true;
+  const { containerRef, R3FComponent, isLoading, error } = useSketchLoader(
+    type,
+    id
+  );
 
-    let cleanup: (() => void) | null = null; // Track cleanup function
+  const renderContent = () => {
+    if (error) throw error;
 
-    (async () => {
-      const mod = (await loadSketch(type, id)) as {
-        default:
-          | React.ComponentType
-          | ((container: HTMLElement) => {
-              render: () => void;
-              destroy: () => void;
-            })
-          | ((container: HTMLElement) => void);
-      };
+    if (type === 'vanilla') {
+      return (
+        <div className='container'>
+          <div className='container__box' ref={containerRef} />
 
-      if (!isMounted) return;
+          {isLoading && (
+            <div className='container__preloader'>
+              Loading vanilla sketch...
+            </div>
+          )}
+        </div>
+      );
+    }
 
-      if (type === 'vanilla') {
-        // Get cleanup function from module if exists
+    if (isLoading) {
+      return <div>Loading...</div>;
+    }
 
-        const vanillaModule = mod.default as (
-          container: HTMLElement
-        ) => { render: () => void; destroy: () => void } | void;
+    return R3FComponent ? (
+      <R3FComponent />
+    ) : (
+      <div>Loading r3f component...</div>
+    );
+  };
 
-        // Clear existing canvas
-
-        if (containerRef.current) {
-          containerRef.current?.replaceChildren();
-          cleanup = null;
-        }
-
-        // Render new sketch and save cleanup
-
-        const sketchInstance = vanillaModule(containerRef.current!);
-
-        cleanup = sketchInstance?.destroy
-          ? sketchInstance.destroy
-          : () => {
-              /* Default cleanup */
-              if (containerRef.current) {
-                containerRef.current?.replaceChildren();
-              }
-            };
-      } else {
-        // For R3F, use standard component cleanup
-
-        setComponent(() => mod.default as React.ComponentType);
-
-        cleanup = () => setComponent(null);
-      }
-    })();
-
-    return () => {
-      isMounted = false;
-
-      cleanup?.(); // Execute cleanup on unmount
-    };
-  }, [type, id]);
-
-  if (type === 'vanilla') {
-    return <div ref={containerRef} style={{ width: '100%', height: '100%' }} />;
-  }
-
-  return Component ? <Component /> : <div>Loading...</div>;
+  return renderContent();
 }

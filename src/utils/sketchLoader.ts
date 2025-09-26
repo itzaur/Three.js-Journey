@@ -1,17 +1,36 @@
-const r3fModules = import.meta.glob('/sketches/**/*.{ts,tsx,jsx}', {
+import { R3FModule, VanillaModule, LoadedSketch } from '@/types/types';
+
+const r3fModules = import.meta.glob<R3FModule>('/sketches/**/*.{tsx,jsx}', {
   eager: false,
 });
-const vanillaModules = import.meta.glob('/sketches/**/*.js', { eager: false });
+const vanillaModules = import.meta.glob<VanillaModule>(
+  '/sketches/**/*.{ts,js}',
+  {
+    eager: false,
+  }
+);
 
-export async function loadSketch(type: 'r3f' | 'vanilla', id: string) {
+// console.log('R3F Modules in loader:', r3fModules);
+// console.log('Vanilla Modules in loader:', vanillaModules);
+
+export async function loadSketch(
+  type: 'r3f' | 'vanilla',
+  id: string
+): Promise<LoadedSketch> {
   const map = type === 'r3f' ? r3fModules : vanillaModules;
-  const path = Object.keys(map).find(
-    (path) => path.split('/').pop() === `${id}.${type === 'r3f' ? 'tsx' : 'js'}`
-  );
+  const exts = type === 'r3f' ? ['tsx', 'jsx'] : ['ts', 'js'];
+
+  const path = Object.keys(map).find((path) => {
+    const fileName = path.split('/').pop()!;
+
+    return exts.some((ext) => fileName === `${id}.${ext}`);
+  });
 
   if (!path) throw new Error(`Sketch not found: ${type}/${id}`);
 
-  const mod = await map[path]();
+  const mod = await map[path]!();
 
-  return mod;
+  return type === 'r3f'
+    ? { kind: 'r3f', mod: mod as R3FModule }
+    : { kind: 'vanilla', mod: mod as VanillaModule };
 }

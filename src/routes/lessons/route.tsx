@@ -1,7 +1,7 @@
-import { getLessons } from '@/server/getLessons';
-import { createFileRoute, Link, Outlet } from '@tanstack/react-router';
-import Card from '@/components/Card';
 import { useEffect } from 'react';
+import { createFileRoute, Link, Outlet } from '@tanstack/react-router';
+import { getLessons } from '@/server/getLessons';
+import Card from '@/components/Card';
 
 export const Route = createFileRoute('/lessons')({
   loader: () => getLessons(),

@@ -1,20 +1,18 @@
 import { createServerFn } from '@tanstack/react-start';
+import { VanillaModule, R3FModule, LessonVariant } from '@/types/types';
 
-export type LessonType = 'r3f' | 'vanilla';
-export type LessonVariant = { type: LessonType; id: string; file: string };
-export type Lesson = {
-  sketch: string;
-  title: string;
-  id: string;
-  variants: LessonVariant[];
-};
-
-const r3fModules = import.meta.glob('/sketches/**/*.{ts,tsx,jsx}', {
+const r3fModules = import.meta.glob<R3FModule>('/sketches/**/*.{tsx,jsx}', {
   eager: false,
 });
-const vanillaModules = import.meta.glob('/sketches/**/*.js', {
-  eager: false,
-});
+const vanillaModules = import.meta.glob<VanillaModule>(
+  '/sketches/**/*.{ts,js}',
+  {
+    eager: false,
+  }
+);
+
+// console.log('Vanilla Modules:', vanillaModules);
+// console.log('R3F Modules:', r3fModules);
 
 export const getLessons = createServerFn({
   method: 'GET',
