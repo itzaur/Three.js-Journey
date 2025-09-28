@@ -1,0 +1,28 @@
+.spinner {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+  .spinner__box {
+    text-align: center;
+
+    & svg {
+      margin-bottom: 0.8rem;
+    }
+  }
+
+  .spinner__text {
+    color: var(--color-5);
+    font-size: 1rem;
+    line-height: 1.4;
+  }
+
+  & circle {
+    stroke: var(--color-3);
+  }
+}

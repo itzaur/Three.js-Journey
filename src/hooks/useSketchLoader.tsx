@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { SketchType, R3FSketch, VanillaModule } from '@/types/types';
+import { SketchType } from '@/types/types';
 import { Disposable } from 'core/BaseSketch';
 import { loadSketch } from '@/utils/sketchLoader';
 import { createSketchFactory } from 'core/sketchFactory';
@@ -40,13 +40,13 @@ export const useSketchLoader = (type: SketchType, id: string) => {
           if (containerRef.current) {
             containerRef.current?.replaceChildren();
 
-            const vanillaModule = mod.default as VanillaModule['default'];
+            const vanillaModule = mod.default;
             const factory = createSketchFactory(vanillaModule);
 
             vanillaRef.current = factory(containerRef.current!);
           }
         } else {
-          const r3fComponent = mod.default as R3FSketch;
+          const r3fComponent = mod.default;
           setR3FComponent(() => r3fComponent);
         }
       } catch (err) {

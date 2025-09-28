@@ -1,4 +1,9 @@
-import { R3FModule, VanillaModule, LoadedSketch } from '@/types/types';
+import {
+  SketchType,
+  R3FModule,
+  VanillaModule,
+  LoadedSketch,
+} from '@/types/types';
 
 const r3fModules = import.meta.glob<R3FModule>('/sketches/**/*.{tsx,jsx}', {
   eager: false,
@@ -14,7 +19,7 @@ const vanillaModules = import.meta.glob<VanillaModule>(
 // console.log('Vanilla Modules in loader:', vanillaModules);
 
 export async function loadSketch(
-  type: 'r3f' | 'vanilla',
+  type: SketchType,
   id: string
 ): Promise<LoadedSketch> {
   const map = type === 'r3f' ? r3fModules : vanillaModules;

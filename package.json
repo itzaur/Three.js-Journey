@@ -13,11 +13,13 @@
   "license": "ISC",
   "dependencies": {
     "@fontsource/poppins": "^5.2.6",
+    "@gsap/react": "^2.1.2",
     "@react-three/drei": "^10.6.1",
     "@react-three/fiber": "^9.3.0",
     "@tanstack/react-router": "^1.130.9",
     "@tanstack/react-start": "^1.130.9",
     "@types/three": "^0.178.1",
+    "gsap": "^3.13.0",
     "leva": "^0.10.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",

@@ -1,11 +1,12 @@
 import { Link } from '@tanstack/react-router';
+import { SketchType } from '@/types/types';
 
 function Card({
   sketch,
   variant,
 }: {
   sketch: string;
-  variant: { type: 'r3f' | 'vanilla'; id: string };
+  variant: { type: SketchType; id: string };
 }) {
   return (
     <Link

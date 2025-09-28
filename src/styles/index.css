@@ -11,3 +11,4 @@
 @import './components/lessons.css' layer(components);
 @import './components/cover-preview.css' layer(components);
 @import './components/card.css' layer(components);
+@import './components/spinner.css' layer(components);

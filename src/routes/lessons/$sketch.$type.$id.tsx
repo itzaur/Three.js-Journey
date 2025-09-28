@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useSketchLoader } from '@/hooks/useSketchLoader';
+import { Spinner } from '@/components/Spinner';
 
 export const Route = createFileRoute('/lessons/$sketch/$type/$id')({
   loader: async ({ params }) => ({
@@ -26,16 +27,17 @@ function LessonDetail() {
           <div className='container__box' ref={containerRef} />
 
           {isLoading && (
-            <div className='container__preloader'>
-              Loading vanilla sketch...
-            </div>
+            // <div className='container__preloader'>
+            //   Loading vanilla sketch...
+            // </div>
+            <Spinner visible={isLoading} text='Loading 3D...' />
           )}
         </div>
       );
     }
 
     if (isLoading) {
-      return <div>Loading...</div>;
+      return <Spinner visible={isLoading} text='Loading 3D...' />;
     }
 
     return R3FComponent ? (
