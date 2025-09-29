@@ -1,6 +1,24 @@
 aside {
-  width: 300px;
-  border-right: 1px solid var(--color-6);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--sidebar-width);
+  height: inherit;
+
   padding: 1rem;
+
+  border-right: 1px solid var(--color-6);
+  background-color: var(--surface-document);
+
   overflow-y: auto;
+
+  z-index: 10;
+
+  transition: translate var(--transition-speed) var(--easing);
+
+  @media (width <= 48rem) {
+    min-width: var(--sidebar-width);
+
+    translate: calc(-100% - 1px) 0;
+  }
 }

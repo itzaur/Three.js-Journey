@@ -1,4 +1,7 @@
 .home {
-  display: flex;
-  height: 100vh;
+  position: relative;
+  height: 100dvh;
+
+  margin-left: auto;
+  scrollbar-gutter: stable;
 }

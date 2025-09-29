@@ -44,13 +44,6 @@ function Lessons() {
         <h2 className='lessons__title'>Lessons</h2>
 
         {lessons.map((lesson) => (
-          // <Card
-          //   key={lesson.title}
-          //   title={lesson.title}
-          //   variants={lesson.variants}
-          //   sketch={lesson.sketch}
-          // />
-
           <div key={lesson.title} className='lesson-block'>
             <h3 className='lesson-block__title'>{lesson.title}</h3>
             <div className='lesson-block__grid'>
@@ -60,23 +53,6 @@ function Lessons() {
                   variant={variant}
                   sketch={lesson.sketch}
                 />
-                // <Link
-                //   key={variant.id}
-                //   className='lesson-card'
-                //   to='/lessons/$sketch/$type/$id'
-                //   params={{
-                //     sketch: lesson.sketch,
-                //     type: variant.type,
-                //     id: variant.id,
-                //   }}
-                // >
-                //   <img
-                //     className='cover-preview'
-                //     src='https://placehold.co/400x400'
-                //     alt=''
-                //   />
-                //   {variant.type}
-                // </Link>
               ))}
             </div>
           </div>

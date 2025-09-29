@@ -2,9 +2,17 @@ main {
   position: relative;
   flex: 1;
   display: grid;
-  grid-template-columns: 100% 1fr;
+
+  width: calc(100% - var(--sidebar-width));
+  margin-left: auto;
 
   background-color: var(--bg-color);
+
+  transition: width var(--transition-speed) var(--easing);
+
+  @media (width <= 48rem) {
+    width: 100%;
+  }
 }
 
 .container {
