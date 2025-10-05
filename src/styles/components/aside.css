@@ -22,3 +22,7 @@ aside {
     translate: calc(-100% - 1px) 0;
   }
 }
+
+[data-hidden='false'] {
+  translate: 0 0;
+}

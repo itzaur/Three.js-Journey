@@ -2,6 +2,8 @@ import { useEffect } from 'react';
 import { createFileRoute, Link, Outlet } from '@tanstack/react-router';
 import { getLessons } from '@/server/getLessons';
 import Card from '@/components/Card';
+import { Burger } from '@/components/Burger';
+import useMenu from '@/hooks/useMenu';
 
 export const Route = createFileRoute('/lessons')({
   loader: () => getLessons(),
@@ -10,8 +12,8 @@ export const Route = createFileRoute('/lessons')({
 
 function Lessons() {
   const lessons = Route.useLoaderData();
-
-  console.log('lessons', lessons);
+  const { isMenuOpen, toggleMenu, asideRef } = useMenu();
+  // console.log('lessons', lessons);
 
   useEffect(() => {
     const cards = document.querySelectorAll<HTMLDivElement>('.card');
@@ -40,7 +42,7 @@ function Lessons() {
 
   return (
     <div className='home'>
-      <aside className='lessons' data-grid>
+      <aside ref={asideRef} className='lessons' data-grid data-hidden='true'>
         <h2 className='lessons__title'>Lessons</h2>
 
         {lessons.map((lesson) => (
@@ -60,6 +62,7 @@ function Lessons() {
       </aside>
 
       <main id='root'>
+        <Burger isMenuOpen={isMenuOpen} onToggle={toggleMenu} />
         <Outlet />
       </main>
     </div>

@@ -1,0 +1,31 @@
+.burger {
+  position: absolute;
+  left: 1rem;
+  bottom: 1rem;
+
+  display: grid;
+  place-items: center;
+
+  padding: 0.2rem;
+
+  fill: var(--text-color);
+  background-color: var(--color-16);
+  border: none;
+  border-radius: 0.2em;
+
+  cursor: pointer;
+  appearance: button;
+  z-index: 2;
+
+  opacity: 0;
+  visibility: hidden;
+
+  transition-property: opacity, visibility;
+  transition-duration: var(--transition-speed);
+  transition-timing-function: var(--easing);
+
+  @media (width <= 48rem) {
+    opacity: 1;
+    visibility: visible;
+  }
+}

@@ -22,3 +22,7 @@ export type Lesson = {
   id: string;
   variants: LessonVariant[];
 };
+export interface BurgerProps {
+  isMenuOpen: boolean;
+  onToggle: () => void;
+}
