@@ -3,9 +3,11 @@ import { SketchType } from '@/types/types';
 
 function Card({
   sketch,
+  preview,
   variant,
 }: {
   sketch: string;
+  preview?: string;
   variant: { type: SketchType; id: string };
 }) {
   return (
@@ -22,8 +24,12 @@ function Card({
       <div className='card__cover'>
         <img
           className='cover-preview'
-          src='https://images.pexels.com/photos/861440/pexels-photo-861440.jpeg'
-          alt=''
+          src={
+            preview
+              ? preview
+              : 'https://images.pexels.com/photos/861440/pexels-photo-861440.jpeg'
+          }
+          alt={sketch}
         />
       </div>
       <div className='card__info'>

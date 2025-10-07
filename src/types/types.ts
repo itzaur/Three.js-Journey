@@ -19,6 +19,7 @@ export type LessonVariant = { type: SketchType; id: string; file: string };
 export type Lesson = {
   sketch: string;
   title: string;
+  preview?: string;
   id: string;
   variants: LessonVariant[];
 };

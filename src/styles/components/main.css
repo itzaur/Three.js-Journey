@@ -27,3 +27,12 @@ main {
     inset: 1rem 0 0 1rem;
   }
 }
+
+.description {
+  position: absolute;
+  top: 1rem;
+  left: 2rem;
+
+  font-weight: 500;
+  z-index: 1;
+}

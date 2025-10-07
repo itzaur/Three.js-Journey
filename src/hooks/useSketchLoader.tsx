@@ -10,12 +10,13 @@ export const useSketchLoader = (type: SketchType, id: string) => {
   );
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
+
   const containerRef = useRef<HTMLDivElement>(null);
   const vanillaRef = useRef<Disposable | null>(null);
+  const descriptionRef = useRef(null);
 
   useEffect(() => {
     let isMounted = true;
-    let cleanup: (() => void) | null = null;
 
     const loadSketchData = async () => {
       setIsLoading(true);
@@ -26,17 +27,7 @@ export const useSketchLoader = (type: SketchType, id: string) => {
 
         if (!isMounted) return;
 
-        cleanup = () => {
-          vanillaRef.current?.dispose();
-          vanillaRef.current = null;
-
-          setR3FComponent(null);
-        };
-
         if (kind === 'vanilla') {
-          vanillaRef.current?.dispose();
-          vanillaRef.current = null;
-
           if (containerRef.current) {
             containerRef.current?.replaceChildren();
 
@@ -64,7 +55,6 @@ export const useSketchLoader = (type: SketchType, id: string) => {
 
     return () => {
       isMounted = false;
-      cleanup?.();
       vanillaRef.current?.dispose();
       vanillaRef.current = null;
     };
@@ -72,6 +62,7 @@ export const useSketchLoader = (type: SketchType, id: string) => {
 
   return {
     containerRef,
+    descriptionRef,
     R3FComponent,
     isLoading,
     error,

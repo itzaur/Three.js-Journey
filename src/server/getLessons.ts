@@ -10,9 +10,12 @@ const vanillaModules = import.meta.glob<VanillaModule>(
     eager: false,
   }
 );
-
-// console.log('Vanilla Modules:', vanillaModules);
-// console.log('R3F Modules:', r3fModules);
+const previewCovers = import.meta.glob<{ default: string }>(
+  '/sketches/**/*.{png,webp}',
+  {
+    eager: true,
+  }
+);
 
 export const getLessons = createServerFn({
   method: 'GET',
@@ -39,12 +42,22 @@ export const getLessons = createServerFn({
     {}
   );
 
+  const covers = Object.entries(previewCovers).map(([path, mod]) => ({
+    path,
+    url: mod.default,
+  }));
+
   return Object.entries(grouped).map(([sketch, files]) => {
-    const [sketchNumber, sketchName] = sketch.split('. ');
+    const [sketchNumber, sketchName] = sketch.split('.');
+
+    const cover =
+      covers.find((cover) => cover.path.includes(sketch))?.url ?? null;
 
     return {
       sketch: sketchName,
       title: `Lesson ${sketchNumber}: ${sketchName}`,
+      preview: cover,
+      id: sketch,
       variants: files.map(({ type, file }) => ({
         type,
         id: file

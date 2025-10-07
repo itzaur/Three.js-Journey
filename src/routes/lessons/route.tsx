@@ -54,6 +54,7 @@ function Lessons() {
                   key={variant.id}
                   variant={variant}
                   sketch={lesson.sketch}
+                  preview={lesson.preview}
                 />
               ))}
             </div>
