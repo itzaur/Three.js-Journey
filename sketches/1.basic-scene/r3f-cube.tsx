@@ -4,11 +4,11 @@ import { OrbitControls } from '@react-three/drei';
 export default function BasicScene() {
   return (
     <Canvas>
-      <mesh>
-        <ambientLight intensity={Math.PI / 2} />
+      <ambientLight intensity={Math.PI / 1.6} />
+      <mesh rotation={[0, 0.4, 0]}>
         <OrbitControls />
-        <sphereGeometry args={[2, 32, 16]} />
-        <meshStandardMaterial color='orange' wireframe={true} />
+        <boxGeometry args={[2, 2, 2, 10, 10, 10]} />
+        <meshStandardMaterial color='#ffa500' wireframe={true} />
       </mesh>
     </Canvas>
   );

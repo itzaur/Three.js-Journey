@@ -55,7 +55,7 @@ export const getLessons = createServerFn({
 
     return {
       sketch: sketchName,
-      title: `Lesson ${sketchNumber}: ${sketchName}`,
+      title: `Lesson ${sketchNumber}: ${sketchName.replace(/-/g, ' ')}`,
       preview: cover,
       id: sketch,
       variants: files.map(({ type, file }) => ({

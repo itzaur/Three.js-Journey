@@ -7,7 +7,7 @@ function Card({
   variant,
 }: {
   sketch: string;
-  preview?: string;
+  preview?: string | null;
   variant: { type: SketchType; id: string };
 }) {
   return (

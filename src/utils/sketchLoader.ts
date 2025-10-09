@@ -15,9 +15,6 @@ const vanillaModules = import.meta.glob<VanillaModule>(
   }
 );
 
-// console.log('R3F Modules in loader:', r3fModules);
-// console.log('Vanilla Modules in loader:', vanillaModules);
-
 export async function loadSketch(
   type: SketchType,
   id: string

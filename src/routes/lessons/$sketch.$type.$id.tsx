@@ -38,10 +38,10 @@ function LessonDetail() {
     return (
       <>
         {type === 'vanilla' ? (
-          <div className='container'>
-            <div className='container__box' ref={containerRef} />
+          <>
+            <div className='container' ref={containerRef} />
             {isLoading && <Spinner visible={isLoading} text='Loading 3D...' />}
-          </div>
+          </>
         ) : R3FComponent ? (
           <>
             {isLoading && <Spinner visible={isLoading} text='Loading 3D...' />}

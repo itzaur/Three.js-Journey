@@ -2,6 +2,9 @@ export const sketchDescriptions: Record<
   string,
   { text: string; image: string }
 > = {
-  basic: { text: `Basic`, image: 'images/cube.png' },
-  sphere: { text: `Nice sphere`, image: 'images/sphere.png' },
+  'basic-scene': { text: 'Basic scene', image: 'images/cube.png' },
+  'transform-objects': {
+    text: 'Transform objects',
+    image: 'images/sphere.png',
+  },
 };

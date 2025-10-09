@@ -20,9 +20,9 @@
   opacity: 0;
   visibility: hidden;
 
-  transition-property: opacity, visibility;
+  /* transition-property: opacity, visibility;
   transition-duration: var(--transition-speed);
-  transition-timing-function: var(--easing);
+  transition-timing-function: var(--easing); */
 
   @media (width <= 48rem) {
     opacity: 1;
