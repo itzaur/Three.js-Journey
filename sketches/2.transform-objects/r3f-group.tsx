@@ -16,7 +16,11 @@ export default function Sketch() {
           </mesh>
           <mesh position={[-2, 0, 0]}>
             <boxGeometry args={[1, 1, 1, 5, 5, 5]} />
-            <meshStandardMaterial color={0xadfcbb} wireframe={true} />
+            <meshStandardMaterial
+              color={0xadfcbb}
+              wireframe={true}
+              depthTest={false}
+            />
           </mesh>
         </group>
       </TransformControls>
