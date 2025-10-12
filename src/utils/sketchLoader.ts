@@ -3,6 +3,7 @@ import {
   R3FModule,
   VanillaModule,
   LoadedSketch,
+  MetaConfig,
 } from '@/types/types';
 
 const r3fModules = import.meta.glob<R3FModule>('/sketches/**/*.{tsx,jsx}', {
@@ -10,6 +11,12 @@ const r3fModules = import.meta.glob<R3FModule>('/sketches/**/*.{tsx,jsx}', {
 });
 const vanillaModules = import.meta.glob<VanillaModule>(
   '/sketches/**/*.{ts,js}',
+  {
+    eager: false,
+  }
+);
+const metaModules = import.meta.glob<{ default: MetaConfig }>(
+  '/sketches/**/meta.json',
   {
     eager: false,
   }
@@ -30,9 +37,25 @@ export async function loadSketch(
 
   if (!path) throw new Error(`Sketch not found: ${type}/${id}`);
 
+  const folder = path?.split('/').slice(0, -1).join('/');
+  const metaPath = Object.keys(metaModules).find((path) => {
+    return path.startsWith(folder) && path.endsWith('.json');
+  });
+
   const mod = await map[path]!();
 
+  let meta: MetaConfig | null = null;
+
+  if (metaPath) {
+    try {
+      const metaMod = await metaModules[metaPath]!();
+      meta = metaMod?.default ?? null;
+    } catch (e) {
+      meta = null;
+    }
+  }
+
   return type === 'r3f'
-    ? { kind: 'r3f', mod: mod as R3FModule }
-    : { kind: 'vanilla', mod: mod as VanillaModule };
+    ? { kind: 'r3f', mod: mod as R3FModule, meta }
+    : { kind: 'vanilla', mod: mod as VanillaModule, meta };
 }

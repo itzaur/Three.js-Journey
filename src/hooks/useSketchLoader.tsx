@@ -1,13 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
-import { SketchType } from '@/types/types';
+import { R3FSketch, SketchType } from '@/types/types';
 import { Disposable } from 'core/BaseSketch';
 import { loadSketch } from '@/utils/sketchLoader';
 import { createSketchFactory } from 'core/sketchFactory';
+import CanvasWraper from '@/components/CanvasWrapper';
 
 export const useSketchLoader = (type: SketchType, id: string) => {
-  const [R3FComponent, setR3FComponent] = useState<React.ComponentType | null>(
-    null
-  );
+  const [R3FComponent, setR3FComponent] = useState<R3FSketch | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
@@ -23,7 +22,7 @@ export const useSketchLoader = (type: SketchType, id: string) => {
       setError(null);
 
       try {
-        const { mod, kind } = await loadSketch(type, id);
+        const { mod, kind, meta } = await loadSketch(type, id);
 
         if (!isMounted) return;
 
@@ -38,7 +37,12 @@ export const useSketchLoader = (type: SketchType, id: string) => {
           }
         } else {
           const r3fComponent = mod.default;
-          setR3FComponent(() => r3fComponent);
+
+          const WrappedComponent = () => (
+            <CanvasWraper Component={r3fComponent} meta={meta ?? {}} />
+          );
+
+          setR3FComponent(() => WrappedComponent);
         }
       } catch (err) {
         setError(

@@ -13,6 +13,7 @@ export abstract class BaseSketch implements Disposable {
   protected camera!: THREE.PerspectiveCamera;
   protected renderer!: THREE.WebGLRenderer;
   protected controls!: OrbitControls;
+  protected clock!: THREE.Clock;
   protected resize: () => void;
   protected resizeObserver?: ResizeObserver;
 
@@ -31,6 +32,7 @@ export abstract class BaseSketch implements Disposable {
     this.createCamera();
     this.createRenderer();
     this.createControls();
+    this.createClock();
     this.setupScene();
     this.setupListeners();
 
@@ -57,6 +59,10 @@ export abstract class BaseSketch implements Disposable {
   protected createControls() {
     this.controls = new OrbitControls(this.camera, this.container);
     this.controls.enableDamping = true;
+  }
+
+  protected createClock() {
+    this.clock = new THREE.Clock();
   }
 
   protected createRenderer() {

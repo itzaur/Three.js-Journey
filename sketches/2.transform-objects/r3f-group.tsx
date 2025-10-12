@@ -1,4 +1,3 @@
-import { Canvas } from '@react-three/fiber';
 import { OrbitControls, TransformControls } from '@react-three/drei';
 import { extend } from '@react-three/fiber';
 import { AxesHelper } from 'three';
@@ -7,7 +6,7 @@ extend(AxesHelper);
 
 export default function Sketch() {
   return (
-    <Canvas camera={{ position: [3, 2, 3] }}>
+    <>
       <TransformControls size={1} detach={false}>
         <group position={[0, 0.5, 0]}>
           <mesh position={[1.5, 0.5, 0]}>
@@ -28,6 +27,6 @@ export default function Sketch() {
       <axesHelper scale={2} />
       <gridHelper args={[5, 10, 0x888888, 0x444444]} />
       <OrbitControls enableDamping={true} makeDefault />
-    </Canvas>
+    </>
   );
 }

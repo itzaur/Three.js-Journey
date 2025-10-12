@@ -1,0 +1,12 @@
+{
+  "camera": {
+    "position": [3, 2, 3],
+    "fov": 75
+  },
+  "lights": [
+    {
+      "type": "ambient",
+      "intensity": 0.7
+    }
+  ]
+}

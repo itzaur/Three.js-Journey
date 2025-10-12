@@ -1,0 +1,11 @@
+{
+  "camera": {
+    "position": [0, 0, 5]
+  },
+  "lights": [
+    {
+      "type": "ambient",
+      "intensity": 1.9
+    }
+  ]
+}

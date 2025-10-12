@@ -16,10 +16,7 @@ export default class Sphere extends BaseSketch {
     const material = new THREE.MeshBasicMaterial({
       color: 0xadfcbb,
       wireframe: true,
-      // depthWrite: false,
       depthTest: false,
-      // vertexColors: true,
-      // toneMapped: false,
     });
     this.group = new THREE.Group();
     this.sphere = new THREE.Mesh(geometry, material);
