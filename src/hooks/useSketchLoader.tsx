@@ -31,7 +31,7 @@ export const useSketchLoader = (type: SketchType, id: string) => {
             containerRef.current?.replaceChildren();
 
             const vanillaModule = mod.default;
-            const factory = createSketchFactory(vanillaModule);
+            const factory = createSketchFactory(vanillaModule, meta ?? {});
 
             vanillaRef.current = factory(containerRef.current!);
           }

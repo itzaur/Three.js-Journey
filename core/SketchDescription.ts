@@ -8,4 +8,5 @@ export const sketchDescriptions: Record<
     image: 'images/sphere.png',
   },
   animations: { text: 'Animations' },
+  cameras: { text: 'Cameras' },
 };

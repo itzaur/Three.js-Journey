@@ -5,7 +5,7 @@ export type SketchType = 'r3f' | 'vanilla';
 
 export type VanillaSketch = new (container: HTMLElement) => Disposable;
 export type VanillaModule = {
-  default: new (container: HTMLElement) => BaseSketch;
+  default: new (container: HTMLElement, meta?: MetaConfig) => BaseSketch;
 };
 
 export type R3FSketch = React.ComponentType;

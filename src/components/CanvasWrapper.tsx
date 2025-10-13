@@ -4,7 +4,12 @@ import { CanvasWrapperProps } from '@/types/types';
 const CanvasWraper = ({ Component, meta }: CanvasWrapperProps) => {
   return (
     <Canvas
-      camera={{ position: meta?.camera?.position, fov: meta?.camera?.fov }}
+      camera={{
+        position: meta?.camera?.position,
+        fov: meta?.camera?.fov ?? 75,
+        near: meta?.camera?.near ?? 0.1,
+        far: meta?.camera?.far ?? 1000,
+      }}
     >
       {Array.isArray(meta?.lights) &&
         meta.lights.map((light, i) => {
