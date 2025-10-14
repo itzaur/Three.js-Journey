@@ -42,7 +42,12 @@ function Lessons() {
 
   return (
     <div className='home'>
-      <aside ref={asideRef} className='lessons' data-grid data-hidden='true'>
+      <aside
+        ref={asideRef}
+        className='lessons scrollbar'
+        data-grid
+        data-hidden='true'
+      >
         <h2 className='lessons__title'>Lessons</h2>
 
         {lessons.map((lesson) => (

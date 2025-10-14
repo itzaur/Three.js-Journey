@@ -1,0 +1,30 @@
+::-webkit-scrollbar {
+  width: 0.14rem;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--color-1),
+    transparent
+  );
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  .scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+
+    border-width: 0.14rem;
+    border-left: 0;
+    border-style: solid;
+    border-image: linear-gradient(
+        to bottom,
+        transparent,
+        var(--color-1),
+        transparent
+      )
+      0 100%;
+  }
+}
