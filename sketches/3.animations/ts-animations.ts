@@ -6,7 +6,7 @@ export default class Animations extends BaseSketch {
 
   protected setupScene() {
     const geometry = new THREE.CapsuleGeometry(0.5, 0.5, 4, 8);
-    const material = new THREE.MeshBasicMaterial({
+    const material = new THREE.MeshStandardMaterial({
       color: '#a8b1ff',
       wireframe: true,
     });

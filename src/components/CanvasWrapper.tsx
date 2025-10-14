@@ -5,7 +5,7 @@ const CanvasWraper = ({ Component, meta }: CanvasWrapperProps) => {
   return (
     <Canvas
       camera={{
-        position: meta?.camera?.position,
+        position: meta?.camera?.position ?? [0, 0, 3],
         fov: meta?.camera?.fov ?? 75,
         near: meta?.camera?.near ?? 0.1,
         far: meta?.camera?.far ?? 1000,
@@ -18,15 +18,16 @@ const CanvasWraper = ({ Component, meta }: CanvasWrapperProps) => {
               return (
                 <directionalLight
                   key={i}
-                  position={light.position || [2, 2, 2]}
+                  position={light.position ?? [2, 2, 2]}
                   intensity={light.intensity ?? 1}
+                  color={light.color ?? 0xffffff}
                 />
               );
             case 'point':
               return (
                 <pointLight
                   key={i}
-                  position={light.position || [0, 3, 3]}
+                  position={light.position ?? [0, 3, 3]}
                   intensity={light.intensity ?? 1}
                 />
               );
@@ -34,13 +35,17 @@ const CanvasWraper = ({ Component, meta }: CanvasWrapperProps) => {
               return (
                 <spotLight
                   key={i}
-                  position={light.position || [0, 3, 3]}
+                  position={light.position ?? [0, 3, 3]}
                   intensity={light.intensity ?? 1}
                 />
               );
             default:
               return (
-                <ambientLight key={i} intensity={light.intensity ?? 0.3} />
+                <ambientLight
+                  key={i}
+                  intensity={light.intensity ?? 0.3}
+                  color={light.color ?? 0xffffff}
+                />
               );
           }
         })}

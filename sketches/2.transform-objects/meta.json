@@ -6,7 +6,7 @@
   "lights": [
     {
       "type": "ambient",
-      "intensity": 0.7
+      "intensity": 1.7
     }
   ]
 }

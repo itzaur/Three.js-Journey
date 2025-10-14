@@ -6,7 +6,7 @@ export default class Cube extends BaseSketch {
 
   protected setupScene() {
     const geometry = new THREE.BoxGeometry(2, 2, 2, 10, 10, 10);
-    const material = new THREE.MeshBasicMaterial({
+    const material = new THREE.MeshStandardMaterial({
       color: '#ffa500',
       wireframe: true,
     });

@@ -1,6 +1,6 @@
 import { OrbitControls, TransformControls } from '@react-three/drei';
-import { extend } from '@react-three/fiber';
 import { AxesHelper } from 'three';
+import { extend } from '@react-three/fiber';
 
 extend(AxesHelper);
 
@@ -23,7 +23,6 @@ export default function Sketch() {
           </mesh>
         </group>
       </TransformControls>
-      <ambientLight intensity={Math.PI / 2.5} />
       <axesHelper scale={2} />
       <gridHelper args={[5, 10, 0x888888, 0x444444]} />
       <OrbitControls enableDamping={true} makeDefault />

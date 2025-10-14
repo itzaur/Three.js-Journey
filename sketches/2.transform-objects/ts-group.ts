@@ -13,7 +13,7 @@ export default class Sphere extends BaseSketch {
 
   protected setupScene(): void {
     const geometry = new THREE.SphereGeometry(1, 32, 16);
-    const material = new THREE.MeshBasicMaterial({
+    const material = new THREE.MeshStandardMaterial({
       color: 0xadfcbb,
       wireframe: true,
       depthTest: false,
