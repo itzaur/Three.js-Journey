@@ -1,9 +1,41 @@
 import { Canvas } from '@react-three/fiber';
-import { CanvasWrapperProps } from '@/types/types';
+import {
+  CanvasWrapperProps,
+  FullscreenDocument,
+  FullscreenElement,
+} from '@/types/types';
+import { useCallback, useRef } from 'react';
+import ResizeHandler from './ResizeHandler';
 
 const CanvasWraper = ({ Component, meta }: CanvasWrapperProps) => {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+  const handleDoubleClick = useCallback(() => {
+    const canvas = canvasRef.current as FullscreenElement;
+    const doc: FullscreenDocument = document;
+    const fullscreenElement = doc.fullscreenElement || doc.webkitExitFullscreen;
+
+    if (!canvas) return;
+
+    if (!fullscreenElement) {
+      if (canvas.requestFullscreen) {
+        canvas.requestFullscreen();
+      } else if (canvas.webkitRequestFullscreen) {
+        canvas.webkitRequestFullscreen();
+      }
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (doc.webkitExitFullscreen) {
+        doc.webkitExitFullscreen();
+      }
+    }
+  }, []);
+
   return (
     <Canvas
+      ref={canvasRef}
+      onDoubleClick={handleDoubleClick}
       camera={{
         position: meta?.camera?.position ?? [0, 0, 3],
         fov: meta?.camera?.fov ?? 75,
@@ -11,6 +43,8 @@ const CanvasWraper = ({ Component, meta }: CanvasWrapperProps) => {
         far: meta?.camera?.far ?? 1000,
       }}
     >
+      <ResizeHandler />
+
       {Array.isArray(meta?.lights) &&
         meta.lights.map((light, i) => {
           switch (light.type) {
@@ -49,6 +83,7 @@ const CanvasWraper = ({ Component, meta }: CanvasWrapperProps) => {
               );
           }
         })}
+
       <Component />
     </Canvas>
   );

@@ -79,3 +79,13 @@ export interface CanvasWrapperProps {
   Component: R3FSketch;
   meta?: MetaConfig;
 }
+
+//DoublClick Functional
+export type FullscreenDocument = Document & {
+  webkitFullscreenElement?: Element | null;
+  webkitExitFullscreen?: () => Promise<void>;
+};
+
+export type FullscreenElement = Element & {
+  webkitRequestFullscreen?: () => Promise<void>;
+};

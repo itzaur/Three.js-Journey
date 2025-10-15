@@ -1,6 +1,10 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { MetaConfig } from '@/types/types';
+import {
+  FullscreenDocument,
+  FullscreenElement,
+  MetaConfig,
+} from '@/types/types';
 
 export interface Disposable {
   dispose(): void;
@@ -15,7 +19,9 @@ export abstract class BaseSketch implements Disposable {
   protected renderer!: THREE.WebGLRenderer;
   protected controls!: OrbitControls;
   protected clock!: THREE.Clock;
+  protected isFullscreen!: boolean;
   protected resize: () => void;
+  protected doubleClick: () => void;
   protected mousemove!: (e: MouseEvent) => void;
   protected meta?: MetaConfig;
 
@@ -25,7 +31,10 @@ export abstract class BaseSketch implements Disposable {
     this.width = this.container.clientWidth;
     this.height = this.container.clientHeight;
 
+    this.isFullscreen = false;
+
     this.resize = () => this.onResize();
+    this.doubleClick = () => this.onDoubleClick();
   }
 
   protected abstract setupScene(): void;
@@ -109,7 +118,7 @@ export abstract class BaseSketch implements Disposable {
             );
         }
 
-        const position: [number, number, number] = light?.position ?? [0, 3, 3];
+        const position: THREE.Vector3Tuple = light?.position ?? [0, 3, 3];
         lightObj.position.set(...position);
 
         this.scene.add(lightObj);
@@ -137,8 +146,13 @@ export abstract class BaseSketch implements Disposable {
 
   protected onResize() {
     // Update sizes
-    this.width = this.container.clientWidth;
-    this.height = this.container.clientHeight;
+    if (this.isFullscreen) {
+      this.width = window.innerWidth;
+      this.height = window.innerHeight;
+    } else {
+      this.width = this.container.clientWidth;
+      this.height = this.container.clientHeight;
+    }
 
     // Update camera
     this.camera.aspect = this.width / this.height;
@@ -166,8 +180,39 @@ export abstract class BaseSketch implements Disposable {
     this.camera.position.y = y * 3;
   }
 
+  protected onDoubleClick() {
+    this.isFullscreen = !this.isFullscreen;
+
+    const doc: FullscreenDocument = document;
+    const canvas: FullscreenElement = this.renderer.domElement;
+
+    const fullscreenElement =
+      doc.fullscreenElement || doc.webkitFullscreenElement;
+
+    if (!fullscreenElement) {
+      if (canvas.requestFullscreen) {
+        canvas.requestFullscreen();
+      } else if (canvas.webkitRequestFullscreen) {
+        canvas.webkitRequestFullscreen();
+      }
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (doc.webkitExitFullscreen) {
+        doc.webkitExitFullscreen();
+      }
+    }
+
+    const colorBg = getComputedStyle(document.documentElement).getPropertyValue(
+      '--bg-color'
+    );
+
+    this.renderer.setClearColor(colorBg, 1);
+  }
+
   protected setupListeners() {
     window.addEventListener('resize', this.resize, { passive: true });
+    window.addEventListener('dblclick', this.doubleClick, { passive: true });
   }
 
   dispose() {
@@ -175,6 +220,7 @@ export abstract class BaseSketch implements Disposable {
     this.renderer.dispose();
 
     window.removeEventListener('resize', this.resize);
+    window.removeEventListener('dblclick', this.doubleClick);
 
     if (this.mousemove) {
       window.removeEventListener('mousemove', this.mousemove);
