@@ -1,3 +1,4 @@
+import { Color } from 'three';
 import { ComponentType } from 'react';
 import { BaseSketch, Disposable } from 'core/BaseSketch';
 
@@ -33,6 +34,18 @@ export interface BurgerProps {
   onToggle: () => void;
 }
 
+export interface LightConfig {
+  type: 'ambient' | 'directional' | 'point' | 'spot';
+  position?: [number, number, number];
+  intensity?: number;
+  color?: string;
+  castShadow?: boolean;
+  distance?: number;
+  decay?: number;
+  angle?: number;
+  penumbra?: number;
+}
+
 export interface MetaConfig {
   camera?: {
     position: [number, number, number];
@@ -40,17 +53,7 @@ export interface MetaConfig {
     near?: number;
     far?: number;
   };
-  lights?: {
-    type: 'ambient' | 'directional' | 'point' | 'spot';
-    position: [number, number, number];
-    intensity?: number;
-    color?: string;
-    castShadow?: boolean;
-    distance?: number;
-    decay?: number;
-    angle?: number;
-    penumbra?: number;
-  };
+  lights?: LightConfig[];
   background?: string;
   environment?: {
     preset?:
@@ -88,4 +91,24 @@ export type FullscreenDocument = Document & {
 
 export type FullscreenElement = Element & {
   webkitRequestFullscreen?: () => Promise<void>;
+};
+
+export type MeshParams = {
+  position: { x: number; y: number; z: number };
+  width: number;
+  height: number;
+  depth: number;
+  widthSegments?: number;
+  heightSegments?: number;
+  depthSegments?: number;
+  wireframe?: boolean;
+  size?: number;
+  sizes?: {} | undefined;
+  count?: number;
+  color: string | number | Color;
+  metalness?: number;
+  roughness?: number;
+  rotationSpeed?: number;
+  rotationIndex?: number;
+  autoRotate?: boolean;
 };

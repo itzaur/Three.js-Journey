@@ -52,7 +52,10 @@ function Lessons() {
 
         {lessons.map((lesson) => (
           <div key={lesson.title} className='lesson-block'>
-            <h3 className='lesson-block__title'>{lesson.title}</h3>
+            <h3 className='lesson-block__title'>
+              <span>{lesson.title.split(':')[0]}:</span>
+              {lesson.title.split(':').at(-1)}
+            </h3>
             <div className='lesson-block__grid'>
               {lesson.variants.map((variant) => (
                 <Card

@@ -3,8 +3,10 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import {
   FullscreenDocument,
   FullscreenElement,
+  LightConfig,
   MetaConfig,
 } from '@/types/types';
+import { Pane } from 'tweakpane';
 
 export interface Disposable {
   dispose(): void;
@@ -19,10 +21,12 @@ export abstract class BaseSketch implements Disposable {
   protected renderer!: THREE.WebGLRenderer;
   protected controls!: OrbitControls;
   protected clock!: THREE.Clock;
+  protected lights: Array<{ config: LightConfig; obj: THREE.Light }> = [];
   protected isFullscreen!: boolean;
   protected resize: () => void;
   protected doubleClick: () => void;
   protected mousemove!: (e: MouseEvent) => void;
+  protected pane!: Pane;
   protected meta?: MetaConfig;
 
   constructor(container: HTMLElement, meta?: MetaConfig) {
@@ -46,8 +50,9 @@ export abstract class BaseSketch implements Disposable {
     this.createControls();
     this.createClock();
     this.createLights();
-    this.setupScene();
+    this.createDebugUI();
     this.setupListeners();
+    this.setupScene();
 
     this.renderer.setAnimationLoop(() => {
       this.update();
@@ -82,48 +87,57 @@ export abstract class BaseSketch implements Disposable {
   }
 
   protected createLights() {
-    if (Array.isArray(this.meta?.lights)) {
-      this.meta.lights.forEach((light) => {
-        let lightObj: THREE.Light;
+    if (!this.meta) this.meta = {};
+    if (!Array.isArray(this.meta?.lights)) this.meta.lights = [];
 
-        switch (light.type) {
-          case 'directional':
-            lightObj = new THREE.DirectionalLight(
-              light.color ?? 0xffffff,
-              light.intensity ?? 1
-            );
-            break;
-          case 'point':
-            lightObj = new THREE.PointLight(
-              light.color ?? 0xffffff,
-              light.intensity ?? 1,
-              light.distance ?? 50,
-              light.decay ?? 2
-            );
-            break;
-          case 'spot':
-            lightObj = new THREE.SpotLight(
-              light.color ?? 0xffffff,
-              light.intensity ?? 1,
-              light.distance ?? 100,
-              light.angle ?? Math.PI / 4,
-              light.penumbra ?? 0.3,
-              light.decay ?? 2
-            );
-            break;
-          default:
-            lightObj = new THREE.AmbientLight(
-              light.color ?? 0xffffff,
-              light.intensity ?? 0.3
-            );
-        }
+    this.createLightsFrpomMeta();
+  }
 
-        const position: THREE.Vector3Tuple = light?.position ?? [0, 3, 3];
-        lightObj.position.set(...position);
+  protected createLightsFrpomMeta() {
+    this.meta?.lights?.forEach((light) => {
+      let lightObj: THREE.Light;
 
-        this.scene.add(lightObj);
-      });
-    }
+      switch (light.type) {
+        case 'directional':
+          lightObj = new THREE.DirectionalLight(
+            light.color ?? 0xffffff,
+            light.intensity ?? 1
+          );
+          break;
+        case 'point':
+          lightObj = new THREE.PointLight(
+            light.color ?? 0xffffff,
+            light.intensity ?? 1,
+            light.distance ?? 50,
+            light.decay ?? 2
+          );
+          break;
+        case 'spot':
+          lightObj = new THREE.SpotLight(
+            light.color ?? 0xffffff,
+            light.intensity ?? 1,
+            light.distance ?? 100,
+            light.angle ?? Math.PI / 4,
+            light.penumbra ?? 0.3,
+            light.decay ?? 2
+          );
+          break;
+        default:
+          lightObj = new THREE.AmbientLight(
+            light.color ?? 0xffffff,
+            light.intensity ?? 0.3
+          );
+      }
+
+      const position: THREE.Vector3Tuple = light?.position ?? [0, 3, 3];
+      lightObj.position.set(...position);
+
+      if (lightObj.castShadow) lightObj.castShadow = true;
+
+      this.scene.add(lightObj);
+
+      this.lights.push({ config: light, obj: lightObj });
+    });
   }
 
   protected createRenderer() {
@@ -215,9 +229,94 @@ export abstract class BaseSketch implements Disposable {
     window.addEventListener('dblclick', this.doubleClick, { passive: true });
   }
 
+  protected createDebugUI() {
+    this.pane = new Pane();
+  }
+
+  protected setupLightsUI() {
+    const [ambientLight, directionalLight] = this.lights;
+    const lightsFolder = this.pane.addFolder({ title: 'Lights' });
+
+    const lightsTab = lightsFolder.addTab({
+      pages: [
+        { title: ambientLight.config.type },
+        { title: directionalLight.config.type },
+      ],
+    });
+
+    const [ambientLightTab, directionalLightTab] = lightsTab.pages;
+
+    ambientLightTab
+      .addBinding(ambientLight.obj, 'position', {
+        x: { min: -10, max: 10, step: 0.01 },
+        y: { min: -10, max: 10, step: 0.01, inverted: true },
+        z: 0,
+      })
+      .on('change', (e) => {
+        ambientLight.obj.position.copy(e.value);
+      });
+
+    ambientLightTab.addBinding(ambientLight.obj, 'intensity', {
+      min: 0,
+      max: 10,
+      step: 0.01,
+    });
+
+    ambientLightTab
+      .addBinding(ambientLight.obj, 'color', {
+        view: 'color',
+        // picker: 'inline',
+        color: { type: 'float', alpha: true },
+      })
+      .on('change', (e) => {
+        try {
+          ambientLight.obj.color.set(e.value);
+        } catch (error) {
+          console.warn('Invalid color:', e.value, error);
+
+          ambientLight.obj.color.set(0xffffff);
+        }
+      });
+
+    directionalLightTab
+      .addBinding(directionalLight.obj, 'position', {
+        x: { min: -3, max: 3, step: 0.01 },
+        y: { min: -3, max: 3, step: 0.01, inverted: true },
+        z: 0,
+      })
+      .on('change', (e) => {
+        directionalLight.obj.position.copy(e.value);
+      });
+
+    directionalLightTab.addBinding(directionalLight.obj, 'intensity', {
+      min: 0,
+      max: 20,
+      step: 0.01,
+    });
+
+    directionalLightTab
+      .addBinding(directionalLight.obj, 'color', {
+        view: 'color',
+        // picker: 'inline',
+        color: { type: 'float' },
+      })
+      .on('change', (e) => {
+        try {
+          directionalLight.obj.color.set(e.value);
+        } catch (error) {
+          console.warn('Invalid color:', e.value, error);
+
+          directionalLight.obj.color.set(0xffffff);
+        }
+      });
+  }
+
   dispose() {
     this.renderer.setAnimationLoop(null);
     this.renderer.dispose();
+
+    if (this.controls) this.controls.dispose();
+    if (this.pane) this.pane.dispose();
 
     window.removeEventListener('resize', this.resize);
     window.removeEventListener('dblclick', this.doubleClick);
@@ -240,6 +339,7 @@ export abstract class BaseSketch implements Disposable {
         }
       }
     });
+    this.scene.clear();
 
     this.container.innerHTML = '';
   }

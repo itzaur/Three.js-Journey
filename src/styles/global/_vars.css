@@ -1,10 +1,13 @@
 @import 'theme.css';
+@import 'tweakpane';
 
 :root {
   --primary-color: #111113;
   --secondary-color: #333;
   --bg-color: #1b1b1f;
   --text-color: #fff;
+  /* --text-accent: #a8b1ff; */
+  --text-accent: #bfa6a6;
   --font-family: 'Poppins', sans-serif;
 
   --sidebar-width: 315px;
