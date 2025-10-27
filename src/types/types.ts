@@ -9,7 +9,10 @@ export type VanillaModule = {
   default: new (container: HTMLElement, meta?: MetaConfig) => BaseSketch;
 };
 
-export type R3FSketch = React.ComponentType;
+export type R3FSketch = React.ComponentType<{
+  meta?: MetaConfig;
+  setLights?: React.Dispatch<React.SetStateAction<LightConfig[]>>;
+}>;
 export type R3FModule = { default: ComponentType };
 
 export interface LoadedSketchBase<M> {
@@ -44,6 +47,11 @@ export interface LightConfig {
   decay?: number;
   angle?: number;
   penumbra?: number;
+}
+
+export interface LightsProps {
+  lights: LightConfig[];
+  setLights: React.Dispatch<React.SetStateAction<LightConfig[]>>;
 }
 
 export interface MetaConfig {

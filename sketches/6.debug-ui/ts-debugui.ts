@@ -65,10 +65,10 @@ export default class DebugUI extends BaseSketch {
      * Debug UI
      */
     // Folders
-    const folders = ['Position', 'Sizes', 'Visibility', 'Animations'].map(
+    const folders = ['Position', 'Sizes', 'Appearance', 'Animation'].map(
       (title) => this.pane.addFolder({ title })
     );
-    const [positions, sizes, visibility, animations] = folders;
+    const [positions, sizes, appearance, animation] = folders;
 
     // Change position
     positions.addBinding(this.mesh, 'position', {
@@ -101,10 +101,10 @@ export default class DebugUI extends BaseSketch {
     );
 
     // Visibility toggle
-    visibility.addBinding(this.mesh, 'visible');
+    appearance.addBinding(this.mesh, 'visible');
 
     // Wireframe toggle
-    visibility.addBinding(this.material, 'wireframe');
+    appearance.addBinding(this.material, 'wireframe');
 
     // Change color
     this.pane
@@ -123,8 +123,8 @@ export default class DebugUI extends BaseSketch {
       });
 
     // Animations
-    animations.addBinding(this.params, 'autoRotate');
-    animations.addBinding(this.params, 'rotationSpeed', {
+    animation.addBinding(this.params, 'autoRotate');
+    animation.addBinding(this.params, 'rotationSpeed', {
       min: 0,
       max: 3,
       step: 0.01,

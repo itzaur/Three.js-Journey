@@ -3,11 +3,14 @@ import {
   CanvasWrapperProps,
   FullscreenDocument,
   FullscreenElement,
+  LightConfig,
 } from '@/types/types';
-import { useCallback, useRef } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import ResizeHandler from './ResizeHandler';
+import Lights from './Lights';
 
 const CanvasWraper = ({ Component, meta }: CanvasWrapperProps) => {
+  const [lights, setLights] = useState<LightConfig[]>(meta?.lights || []);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   const handleDoubleClick = useCallback(() => {
@@ -44,47 +47,9 @@ const CanvasWraper = ({ Component, meta }: CanvasWrapperProps) => {
       }}
     >
       <ResizeHandler />
+      <Lights lights={lights} />
 
-      {Array.isArray(meta?.lights) &&
-        meta.lights.map((light, i) => {
-          switch (light.type) {
-            case 'directional':
-              return (
-                <directionalLight
-                  key={i}
-                  position={light.position ?? [2, 2, 2]}
-                  intensity={light.intensity ?? 1}
-                  color={light.color ?? 0xffffff}
-                />
-              );
-            case 'point':
-              return (
-                <pointLight
-                  key={i}
-                  position={light.position ?? [0, 3, 3]}
-                  intensity={light.intensity ?? 1}
-                />
-              );
-            case 'spot':
-              return (
-                <spotLight
-                  key={i}
-                  position={light.position ?? [0, 3, 3]}
-                  intensity={light.intensity ?? 1}
-                />
-              );
-            default:
-              return (
-                <ambientLight
-                  key={i}
-                  intensity={light.intensity ?? 0.3}
-                  color={light.color ?? 0xffffff}
-                />
-              );
-          }
-        })}
-
-      <Component />
+      <Component meta={{ ...meta, lights }} setLights={setLights} />
     </Canvas>
   );
 };

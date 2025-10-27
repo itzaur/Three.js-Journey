@@ -10,4 +10,5 @@ export const sketchDescriptions: Record<
   animations: { text: 'Animations' },
   cameras: { text: 'Cameras' },
   geometries: { text: 'Geometries' },
+  'debug-ui': { text: 'Debug UI' },
 };

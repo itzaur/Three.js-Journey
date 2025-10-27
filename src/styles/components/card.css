@@ -34,7 +34,7 @@
     height: 100%;
 
     background: radial-gradient(
-      250px circle at var(--mouse-x) var(--mouse-y),
+      var(--gradient-size) circle at var(--mouse-x) var(--mouse-y),
       rgba(255, 255, 255, 0.12),
       transparent 40%
     );
