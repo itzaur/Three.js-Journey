@@ -25,6 +25,8 @@ export default class Textures extends BaseSketch {
     doorTexture.wrapT = THREE.RepeatWrapping;
     doorTexture.rotation = Math.PI / 4;
     doorTexture.center.set(0.5, 0.5);
+
+    doorTexture.colorSpace = THREE.SRGBColorSpace;
     doorTexture.minFilter = THREE.NearestFilter;
     doorTexture.generateMipmaps = false;
 

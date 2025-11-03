@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 import { Canvas } from '@react-three/fiber';
 import {
   CanvasWrapperProps,
@@ -5,7 +6,7 @@ import {
   FullscreenElement,
   LightConfig,
 } from '@/types/types';
-import { useCallback, useRef, useState } from 'react';
+import { Suspense, useCallback, useRef, useState } from 'react';
 import ResizeHandler from './ResizeHandler';
 import Lights from './Lights';
 
@@ -36,21 +37,29 @@ const CanvasWraper = ({ Component, meta }: CanvasWrapperProps) => {
   }, []);
 
   return (
-    <Canvas
-      ref={canvasRef}
-      onDoubleClick={handleDoubleClick}
-      camera={{
-        position: meta?.camera?.position ?? [0, 0, 3],
-        fov: meta?.camera?.fov ?? 75,
-        near: meta?.camera?.near ?? 0.1,
-        far: meta?.camera?.far ?? 1000,
-      }}
-    >
-      <ResizeHandler />
-      <Lights lights={lights} />
+    <Suspense fallback={null}>
+      <Canvas
+        // gl={{
+        //   outputColorSpace: THREE.SRGBColorSpace,
+        //   toneMapping: THREE.ACESFilmicToneMapping,
+        //   toneMappingExposure: 1.0,
+        //   antialias: true,
+        // }}
+        ref={canvasRef}
+        onDoubleClick={handleDoubleClick}
+        camera={{
+          position: meta?.camera?.position ?? [0, 0, 3],
+          fov: meta?.camera?.fov ?? 75,
+          near: meta?.camera?.near ?? 0.1,
+          far: meta?.camera?.far ?? 1000,
+        }}
+      >
+        <ResizeHandler />
+        <Lights lights={lights} />
 
-      <Component meta={{ ...meta, lights }} setLights={setLights} />
-    </Canvas>
+        <Component meta={{ ...meta, lights }} setLights={setLights} />
+      </Canvas>
+    </Suspense>
   );
 };
 
