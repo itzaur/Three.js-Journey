@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router';
 import { SketchType } from '@/types/types';
+import fallback from '/fallback.jpg';
 
 function Card({
   sketch,
@@ -24,11 +25,7 @@ function Card({
       <div className='card__cover'>
         <img
           className='cover-preview'
-          src={
-            preview
-              ? preview
-              : 'https://images.pexels.com/photos/861440/pexels-photo-861440.jpeg'
-          }
+          src={preview ? preview : fallback}
           alt={sketch}
         />
       </div>
