@@ -1,12 +1,16 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import {
+  AssetMap,
   FullscreenDocument,
   FullscreenElement,
   LightConfig,
+  LoadedAssets,
   MetaConfig,
+  TextureOptions,
 } from '@/types/types';
 import { Pane } from 'tweakpane';
+import { isRecord } from '@tweakpane/core';
 
 export interface Disposable {
   dispose(): void;
@@ -23,6 +27,7 @@ export abstract class BaseSketch implements Disposable {
   protected clock!: THREE.Clock;
   protected lights: Array<{ config: LightConfig; obj: THREE.Light }> = [];
   protected isFullscreen!: boolean;
+  protected loadingManager: THREE.LoadingManager;
   protected resize: () => void;
   protected doubleClick: () => void;
   protected mousemove!: (e: MouseEvent) => void;
@@ -37,13 +42,16 @@ export abstract class BaseSketch implements Disposable {
 
     this.isFullscreen = false;
 
+    this.loadingManager = new THREE.LoadingManager();
+    this.loadingManager.onLoad = () => this.startRenderLoop();
+
     this.resize = () => this.onResize();
     this.doubleClick = () => this.onDoubleClick();
   }
 
-  protected abstract setupScene(): void;
+  protected abstract setupScene(): Promise<void> | void;
 
-  init() {
+  async init() {
     this.createScene();
     this.createCamera();
     this.createRenderer();
@@ -52,8 +60,21 @@ export abstract class BaseSketch implements Disposable {
     this.createLights();
     this.createDebugUI();
     this.setupListeners();
-    this.setupScene();
 
+    try {
+      const result = this.setupScene();
+
+      if (result instanceof Promise) {
+        await result;
+      }
+
+      this.startRenderLoop();
+    } catch (error) {
+      console.error('Error during setupScene:', error);
+    }
+  }
+
+  protected startRenderLoop() {
     this.renderer.setAnimationLoop(() => {
       this.update();
       this.render();
@@ -80,6 +101,80 @@ export abstract class BaseSketch implements Disposable {
   protected createControls() {
     this.controls = new OrbitControls(this.camera, this.container);
     this.controls.enableDamping = true;
+  }
+
+  protected async loadAssets<T extends AssetMap>(
+    map: T
+  ): Promise<LoadedAssets<T>> {
+    const texturesLoader = new THREE.TextureLoader(this.loadingManager);
+
+    const loadRecord = async <R>(
+      record: Record<string, string> | undefined,
+      loadFn: (url: string) => Promise<R>
+    ) => {
+      return record
+        ? Object.fromEntries(
+            await Promise.all(
+              Object.entries(record).map(async ([key, value]) => [
+                key,
+                await loadFn(value),
+              ])
+            )
+          )
+        : {};
+    };
+
+    const [textures] = await Promise.all([
+      // Add textures loader here if needed
+      loadRecord(
+        map.textures,
+        (url) =>
+          new Promise((resolve) =>
+            texturesLoader.load(url, (tex) => {
+              tex.colorSpace = THREE.SRGBColorSpace;
+              tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+              tex.needsUpdate = true;
+              resolve(tex);
+            })
+          )
+      ),
+      // TODO: Add model loader here if needed
+
+      // TODO: Add HDRI loader here if needed
+    ]);
+
+    return { textures } as LoadedAssets<T>;
+  }
+
+  protected async loadTextures(url: string, options: TextureOptions = {}) {
+    const loader = new THREE.TextureLoader(this.loadingManager);
+    const texture = await loader.loadAsync(url);
+
+    Object.entries(options).forEach(([key, value]) => {
+      switch (key) {
+        case 'center':
+          if (value instanceof THREE.Vector2) {
+            texture.center.copy(value);
+          }
+          break;
+        case 'repeat':
+          if (value instanceof THREE.Vector2) {
+            texture.repeat.copy(value);
+          }
+          break;
+        case 'offset':
+          if (value instanceof THREE.Vector2) {
+            texture.offset.copy(value);
+          }
+          break;
+        default:
+          Reflect.set(texture, key, value);
+      }
+    });
+
+    texture.needsUpdate = true;
+
+    return texture;
   }
 
   protected createClock() {

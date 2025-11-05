@@ -1,4 +1,13 @@
-import { Color } from 'three';
+import {
+  Color,
+  ColorSpace,
+  DataTexture,
+  Group,
+  Texture,
+  TextureFilter,
+  Vector2,
+  Wrapping,
+} from 'three';
 import { ComponentType } from 'react';
 import { BaseSketch, Disposable } from 'core/BaseSketch';
 
@@ -84,6 +93,7 @@ export interface MetaConfig {
     environmentIntensity?: number;
     files?: String[];
   };
+  textures?: Record<string, string>;
 }
 
 export interface CanvasWrapperProps {
@@ -91,7 +101,7 @@ export interface CanvasWrapperProps {
   meta?: MetaConfig;
 }
 
-//DoublClick Functional
+// DoublClick Functional
 export type FullscreenDocument = Document & {
   webkitFullscreenElement?: Element | null;
   webkitExitFullscreen?: () => Promise<void>;
@@ -119,4 +129,39 @@ export type MeshParams = {
   rotationSpeed?: number;
   rotationIndex?: number;
   autoRotate?: boolean;
+};
+
+export type TextureOptions = {
+  wrapS?: Wrapping;
+  wrapT?: Wrapping;
+  rotation?: number;
+  center?: Vector2;
+  minFilter?: TextureFilter;
+  magFilter?: TextureFilter;
+  colorSpace?: ColorSpace;
+  generateMipmaps?: boolean;
+  repeat?: Vector2;
+  flipY?: boolean;
+  offset?: Vector2;
+};
+
+// Textures, Models, HDRI
+type PathWithExtension<Exts extends string> = `${string}.${Exts}`;
+
+export type AssetMap = {
+  textures?: Record<string, string>;
+  models?: Record<string, PathWithExtension<'gltf' | 'glb' | 'fbx' | 'obj'>>;
+  hdri?: Record<string, PathWithExtension<'hdr' | 'exr'>>;
+};
+
+export type LoadedAssets<T extends AssetMap> = {
+  textures: T['textures'] extends Record<string, string>
+    ? { [K in keyof T['textures']]: Texture }
+    : {};
+  models: T['models'] extends Record<string, string>
+    ? { [K in keyof T['models']]: Group }
+    : {};
+  hdri: T['hdri'] extends Record<string, string>
+    ? { [K in keyof T['hdri']]: DataTexture }
+    : {};
 };

@@ -15,5 +15,9 @@
       "intensity": 0.8,
       "color": "#ffffff"
     }
-  ]
+  ],
+  "textures": {
+    "doorColor": "/textures/door/color.jpg",
+    "checkerboard": "/textures/checkerboard-8x8.png"
+  }
 }
