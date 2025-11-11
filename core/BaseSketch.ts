@@ -10,7 +10,6 @@ import {
   TextureOptions,
 } from '@/types/types';
 import { Pane } from 'tweakpane';
-import { isRecord } from '@tweakpane/core';
 
 export interface Disposable {
   dispose(): void;
@@ -107,6 +106,9 @@ export abstract class BaseSketch implements Disposable {
     map: T
   ): Promise<LoadedAssets<T>> {
     const texturesLoader = new THREE.TextureLoader(this.loadingManager);
+    const rgbeLoader = new (
+      await import('three/examples/jsm/loaders/RGBELoader.js')
+    ).RGBELoader(this.loadingManager);
 
     const loadRecord = async <R>(
       record: Record<string, string> | undefined,
@@ -124,26 +126,45 @@ export abstract class BaseSketch implements Disposable {
         : {};
     };
 
-    const [textures] = await Promise.all([
+    const [textures, hdri] = await Promise.all([
       // Add textures loader here if needed
       loadRecord(
         map.textures,
         (url) =>
-          new Promise((resolve) =>
-            texturesLoader.load(url, (tex) => {
-              tex.colorSpace = THREE.SRGBColorSpace;
-              tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
-              tex.needsUpdate = true;
-              resolve(tex);
-            })
+          new Promise<THREE.Texture>((resolve, reject) =>
+            texturesLoader.load(
+              url,
+              (tex) => {
+                tex.colorSpace = THREE.SRGBColorSpace;
+                tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+                tex.needsUpdate = true;
+                resolve(tex);
+              },
+              undefined,
+              (err) => reject(err)
+            )
           )
       ),
       // TODO: Add model loader here if needed
 
       // TODO: Add HDRI loader here if needed
+      loadRecord(map.hdri, (url) => {
+        return new Promise<THREE.DataTexture>((resolve, reject) => {
+          rgbeLoader.load(
+            url,
+            (hdr) => {
+              hdr.mapping = THREE.EquirectangularReflectionMapping;
+
+              resolve(hdr);
+            },
+            undefined,
+            (err) => reject(err)
+          );
+        });
+      }),
     ]);
 
-    return { textures } as LoadedAssets<T>;
+    return { textures, hdri } as LoadedAssets<T>;
   }
 
   protected async loadTextures(url: string, options: TextureOptions = {}) {

@@ -12,4 +12,5 @@ export const sketchDescriptions: Record<
   geometries: { text: 'Geometries' },
   'debug-ui': { text: 'Debug UI' },
   textures: { text: 'Textures' },
+  materials: { text: 'Materials' },
 };

@@ -93,7 +93,8 @@ export interface MetaConfig {
     environmentIntensity?: number;
     files?: String[];
   };
-  textures?: Record<string, string>;
+  textures?: Record<string, PathWithExtension<'jpg' | 'jpeg' | 'png' | 'webp'>>;
+  hdri?: Record<string, PathWithExtension<'hdr' | 'exr'>>;
 }
 
 export interface CanvasWrapperProps {
@@ -149,7 +150,7 @@ export type TextureOptions = {
 type PathWithExtension<Exts extends string> = `${string}.${Exts}`;
 
 export type AssetMap = {
-  textures?: Record<string, string>;
+  textures?: Record<string, PathWithExtension<'jpg' | 'jpeg' | 'png' | 'webp'>>;
   models?: Record<string, PathWithExtension<'gltf' | 'glb' | 'fbx' | 'obj'>>;
   hdri?: Record<string, PathWithExtension<'hdr' | 'exr'>>;
 };

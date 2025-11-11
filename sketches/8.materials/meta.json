@@ -1,0 +1,39 @@
+{
+  "lights": [
+    {
+      "type": "ambient",
+      "position": [1, 1, 1],
+      "intensity": 1.2,
+      "color": "#ffffff"
+    },
+    {
+      "type": "directional",
+      "position": [1, 2, 1],
+      "intensity": 0.8,
+      "color": "#ffffff"
+    },
+    {
+      "type": "point",
+      "position": [2, 3, 4],
+      "intensity": 30,
+      "color": "#ffffff"
+    }
+  ],
+  "textures": {
+    "doorColor": "/textures/door/color.jpg",
+    "doorAlpha": "/textures/door/alpha.jpg",
+    "doorAmbientOcclusion": "/textures/door/ambientOcclusion.jpg",
+    "doorHeight": "/textures/door/height.jpg",
+    "doorNormal": "/textures/door/normal.jpg",
+    "doorMetalness": "/textures/door/metalness.jpg",
+    "doorRoughness": "/textures/door/roughness.jpg",
+    "matcap": "/textures/matcaps/1.png",
+    "gradient": "/textures/gradients/3.jpg",
+    "matCaps1": "/textures/matcaps/8.png",
+    "matCaps2": "/textures/matcaps/3.png",
+    "gradientMap": "/textures/gradients/3.jpg"
+  },
+  "hdri": {
+    "studio": "/textures/environmentMap/2k.hdr"
+  }
+}
