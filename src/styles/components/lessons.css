@@ -1,4 +1,7 @@
 .lessons {
+  scroll-behavior: smooth;
+  scroll-snap-type: y proximity;
+
   .lesson-block {
     margin-bottom: 2rem;
 
@@ -36,6 +39,15 @@
     animation: spin 1s linear infinite;
 
     text-decoration: none;
+
+    transition:
+      transform 0.3s var(--easing),
+      outline 0.3s var(--easing);
+
+    &[aria-current='page'] {
+      outline: 1px solid var(--color-7);
+      transform: scale(1.02);
+    }
   }
 
   & .lessons__title {

@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { createFileRoute, Link, Outlet } from '@tanstack/react-router';
+import { createFileRoute, Outlet } from '@tanstack/react-router';
 import { getLessons } from '@/server/getLessons';
 import Card from '@/components/Card';
 import { Burger } from '@/components/Burger';

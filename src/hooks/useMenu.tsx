@@ -52,6 +52,18 @@ export default function useMenu(breakpoint = 768) {
     updateAsideVisibility();
     handleMediaQueryChange(mediaQuery);
 
+    // Save lesson scroll position
+    const savedLessonScroll = localStorage.getItem('lessonsScroll');
+
+    if (savedLessonScroll && aside) {
+      aside.scrollTop = +savedLessonScroll;
+    }
+
+    const onScroll = () => {
+      localStorage.setItem('lessonsScroll', String(aside?.scrollTop));
+    };
+
+    aside?.addEventListener('scroll', onScroll, { signal });
     document.addEventListener('mousedown', handleClickOutside, { signal });
     document.addEventListener('keydown', handleKeyDown, { signal });
     mediaQuery.addEventListener('change', handleMediaQueryChange, { signal });

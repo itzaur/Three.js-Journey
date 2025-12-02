@@ -21,6 +21,7 @@ function Card({
         type: variant.type,
         id: variant.id,
       }}
+      activeProps={{ 'aria-current': 'page' }}
     >
       <div className='card__cover'>
         <img
