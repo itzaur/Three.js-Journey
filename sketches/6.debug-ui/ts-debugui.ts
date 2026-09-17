@@ -41,7 +41,7 @@ export default class DebugUI extends BaseSketch {
       this.params.depth,
       this.params.widthSegments,
       this.params.heightSegments,
-      this.params.depthSegments
+      this.params.depthSegments,
     );
     this.material = new THREE.MeshStandardMaterial({
       color: this.params.color,
@@ -51,7 +51,7 @@ export default class DebugUI extends BaseSketch {
     this.mesh.position.set(
       this.params.position.x,
       this.params.position.y,
-      this.params.position.z
+      this.params.position.z,
     );
     this.mesh.scale.set(1, 1, 1);
 
@@ -66,7 +66,7 @@ export default class DebugUI extends BaseSketch {
      */
     // Folders
     const folders = ['Position', 'Sizes', 'Appearance', 'Animation'].map(
-      (title) => this.pane.addFolder({ title })
+      (title) => this.pane.addFolder({ title }),
     );
     const [positions, sizes, appearance, animation] = folders;
 
@@ -96,8 +96,8 @@ export default class DebugUI extends BaseSketch {
           if (e.last) {
             this.updateMesh();
           }
-        })
-      )
+        }),
+      ),
     );
 
     // Visibility toggle
@@ -185,7 +185,7 @@ export default class DebugUI extends BaseSketch {
         1,
         widthSegments,
         heightSegments,
-        depthSegments
+        depthSegments,
       );
 
       this.mesh.geometry = this.geometry;
@@ -202,7 +202,7 @@ export default class DebugUI extends BaseSketch {
     super.render();
 
     if (this.params.autoRotate) {
-      const delta = Math.min(this.clock.getDelta(), 0.1);
+      const delta = Math.min(this.timer.getDelta(), 0.1);
       const rotationSpeed = this.params.rotationSpeed ?? 0.5;
       const rotationIndex = this.params.rotationIndex ?? 0.8;
 

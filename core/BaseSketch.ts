@@ -23,7 +23,7 @@ export abstract class BaseSketch implements Disposable {
   protected camera!: THREE.PerspectiveCamera;
   protected renderer!: THREE.WebGLRenderer;
   protected controls!: OrbitControls;
-  protected clock!: THREE.Clock;
+  protected timer!: THREE.Timer;
   protected lights: Array<{ config: LightConfig; obj: THREE.Light }> = [];
   protected isFullscreen!: boolean;
   protected loadingManager: THREE.LoadingManager;
@@ -55,7 +55,7 @@ export abstract class BaseSketch implements Disposable {
     this.createCamera();
     this.createRenderer();
     this.createControls();
-    this.createClock();
+    this.createTimer();
     this.createLights();
     this.createDebugUI();
     this.setupListeners();
@@ -91,7 +91,7 @@ export abstract class BaseSketch implements Disposable {
       cameraOptions?.fov ?? 75,
       this.width / this.height,
       cameraOptions?.near ?? 0.1,
-      cameraOptions?.far ?? 1000
+      cameraOptions?.far ?? 1000,
     );
     const [x, y, z] = cameraOptions?.position ?? [0, 0, 3];
     this.camera.position.set(x, y, z);
@@ -103,16 +103,16 @@ export abstract class BaseSketch implements Disposable {
   }
 
   protected async loadAssets<T extends AssetMap>(
-    map: T
+    map: T,
   ): Promise<LoadedAssets<T>> {
     const texturesLoader = new THREE.TextureLoader(this.loadingManager);
-    const rgbeLoader = new (
-      await import('three/examples/jsm/loaders/RGBELoader.js')
-    ).RGBELoader(this.loadingManager);
+    const hdrLoader = new (
+      await import('three/examples/jsm/loaders/HDRLoader.js')
+    ).HDRLoader(this.loadingManager);
 
     const loadRecord = async <R>(
       record: Record<string, string> | undefined,
-      loadFn: (url: string) => Promise<R>
+      loadFn: (url: string) => Promise<R>,
     ) => {
       return record
         ? Object.fromEntries(
@@ -120,8 +120,8 @@ export abstract class BaseSketch implements Disposable {
               Object.entries(record).map(async ([key, value]) => [
                 key,
                 await loadFn(value),
-              ])
-            )
+              ]),
+            ),
           )
         : {};
     };
@@ -141,16 +141,16 @@ export abstract class BaseSketch implements Disposable {
                 resolve(tex);
               },
               undefined,
-              (err) => reject(err)
-            )
-          )
+              (err) => reject(err),
+            ),
+          ),
       ),
       // TODO: Add model loader here if needed
 
       // TODO: Add HDRI loader here if needed
       loadRecord(map.hdri, (url) => {
         return new Promise<THREE.DataTexture>((resolve, reject) => {
-          rgbeLoader.load(
+          hdrLoader.load(
             url,
             (hdr) => {
               hdr.mapping = THREE.EquirectangularReflectionMapping;
@@ -158,7 +158,7 @@ export abstract class BaseSketch implements Disposable {
               resolve(hdr);
             },
             undefined,
-            (err) => reject(err)
+            (err) => reject(err),
           );
         });
       }),
@@ -198,8 +198,9 @@ export abstract class BaseSketch implements Disposable {
     return texture;
   }
 
-  protected createClock() {
-    this.clock = new THREE.Clock();
+  protected createTimer() {
+    this.timer = new THREE.Timer();
+    this.timer.connect(document);
   }
 
   protected createLights() {
@@ -217,7 +218,7 @@ export abstract class BaseSketch implements Disposable {
         case 'directional':
           lightObj = new THREE.DirectionalLight(
             light.color ?? 0xffffff,
-            light.intensity ?? 1
+            light.intensity ?? 1,
           );
           break;
         case 'point':
@@ -225,7 +226,7 @@ export abstract class BaseSketch implements Disposable {
             light.color ?? 0xffffff,
             light.intensity ?? 1,
             light.distance ?? 50,
-            light.decay ?? 2
+            light.decay ?? 2,
           );
           break;
         case 'spot':
@@ -235,13 +236,13 @@ export abstract class BaseSketch implements Disposable {
             light.distance ?? 100,
             light.angle ?? Math.PI / 4,
             light.penumbra ?? 0.3,
-            light.decay ?? 2
+            light.decay ?? 2,
           );
           break;
         default:
           lightObj = new THREE.AmbientLight(
             light.color ?? 0xffffff,
-            light.intensity ?? 0.3
+            light.intensity ?? 0.3,
           );
       }
 
@@ -272,6 +273,7 @@ export abstract class BaseSketch implements Disposable {
 
   protected update() {
     this.controls.update();
+    this.timer.update();
   }
 
   protected onResize() {
@@ -334,7 +336,7 @@ export abstract class BaseSketch implements Disposable {
     }
 
     const colorBg = getComputedStyle(document.documentElement).getPropertyValue(
-      '--bg-color'
+      '--bg-color',
     );
 
     this.renderer.setClearColor(colorBg, 1);
@@ -431,6 +433,7 @@ export abstract class BaseSketch implements Disposable {
     this.renderer.setAnimationLoop(null);
     this.renderer.dispose();
 
+    if (this.timer) this.timer.dispose();
     if (this.controls) this.controls.dispose();
     if (this.pane) this.pane.dispose();
 

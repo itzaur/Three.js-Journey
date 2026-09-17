@@ -35,7 +35,7 @@ export default function Materials() {
         texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
         texture.needsUpdate = true;
       });
-    }
+    },
   );
 
   gradientMap.minFilter = THREE.NearestFilter;
@@ -60,7 +60,7 @@ export default function Materials() {
   };
 
   useFrame((state) => {
-    const elapsedTime = state.clock.getElapsedTime();
+    const elapsedTime = state.clock.elapsedTime;
 
     state.scene.children.forEach((child) => {
       child.rotation.y = 0.1 * elapsedTime;

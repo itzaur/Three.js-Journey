@@ -31,7 +31,7 @@ export default class Cameras extends BaseSketch {
 
   protected render() {
     super.render();
-    const elapsedTime = this.clock.getElapsedTime();
+    const elapsedTime = this.timer.getElapsed();
 
     this.camera.position.x = (Math.sin(elapsedTime) * Math.PI * 0.4) / 0.6;
     this.camera.position.y = (Math.cos(elapsedTime) * Math.PI * 0.6) / 3;

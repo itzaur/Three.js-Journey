@@ -51,7 +51,7 @@ export default class Geometries extends BaseSketch {
   protected render() {
     super.render();
 
-    const elapsedTime = this.clock.getElapsedTime();
+    const elapsedTime = this.timer.getElapsed();
 
     this.mesh.rotation.x = Math.sin(elapsedTime) * Math.PI * 0.5;
 

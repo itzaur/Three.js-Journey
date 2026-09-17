@@ -18,7 +18,7 @@ export default class Animations extends BaseSketch {
   protected render() {
     super.render();
 
-    const elapsedTime = this.clock.getElapsedTime();
+    const elapsedTime = this.timer.getElapsed();
     this.mesh.rotation.y = Math.sin(elapsedTime) * Math.PI * 0.1;
     this.mesh.rotation.x = Math.cos(elapsedTime) * Math.PI * 0.1;
 

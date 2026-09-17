@@ -83,35 +83,35 @@ export default class Materials extends BaseSketch {
 
     const sphere = new THREE.Mesh(
       new THREE.SphereGeometry(0.5, 64, 64),
-      material2
+      material2,
     );
     const plane = new THREE.Mesh(
       new THREE.PlaneGeometry(1, 1, 100, 100),
-      material
+      material,
     );
     const torus = new THREE.Mesh(
       new THREE.TorusGeometry(0.3, 0.2, 64, 128),
-      material3
+      material3,
     );
     const torus2 = new THREE.Mesh(
       new THREE.TorusGeometry(0.3, 0.2, 64, 128),
-      material9
+      material9,
     );
     const sphere2 = new THREE.Mesh(
       new THREE.SphereGeometry(0.5, 16, 16),
-      material4
+      material4,
     );
     const cube = new THREE.Mesh(
       new THREE.BoxGeometry(0.5, 0.5, 0.5),
-      material5
+      material5,
     );
     const sphere3 = new THREE.Mesh(
       new THREE.SphereGeometry(0.5, 64, 64),
-      material6
+      material6,
     );
     const cube2 = new THREE.Mesh(
       new THREE.BoxGeometry(0.5, 0.5, 0.5),
-      material7
+      material7,
     );
     const cone = new THREE.Mesh(new THREE.ConeGeometry(0.5, 1, 64), material8);
 
@@ -133,14 +133,14 @@ export default class Materials extends BaseSketch {
       cube,
       cube2,
       cone,
-      sphere3
+      sphere3,
     );
   }
 
   protected render() {
     super.render();
 
-    const elapsedTime = this.clock.getElapsedTime();
+    const elapsedTime = this.timer.getElapsed();
 
     this.scene.children.forEach((child) => {
       child.rotation.y = 0.1 * elapsedTime;
